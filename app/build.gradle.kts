@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.unihub"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.unihub"
@@ -56,6 +56,9 @@ dependencies {
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
+
+    implementation(libs.jetbrains.compose.navigation)
+    implementation(libs.androidx.navigation.common.ktx)
     debugImplementation(libs.bundles.compose.debug)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)

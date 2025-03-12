@@ -11,9 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.example.unihub.R
+import com.example.unihub.ui.theme.ComposeTheme
 import com.example.unihub.ui.theme.UniclubTheme
-import com.example.unihub.uniclub.presentation.authen.LoginState
+import com.example.unihub.uniclub.presentation.authen.login.LoginState
 
 @Composable
 fun LoginInputs(
@@ -31,7 +33,7 @@ fun LoginInputs(
             .fillMaxWidth()
     ) {
         EmailTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier,
             value = loginState.email,
             onValueChange = onEmailChange,
             label = "Email",
@@ -39,7 +41,7 @@ fun LoginInputs(
             errorText = emailError ?: "",
         )
         PasswordTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier,
             value = loginState.password,
             onValueChange = onPasswordChange,
             label = "Password",
@@ -71,17 +73,17 @@ fun LoginInputs(
     }
 }
 
-//
-//@PreviewLightDark
-//@Composable
-//private fun PriceChangePreview() {
-//    ComposeTheme {
-//        LoginInputs(
-//            loginState = LoginState(),
-//            onEmailChange = {},
-//            onPasswordChange = {},
-//            onSubmit = {},
-//            modifier = Modifier
-//        )
-//    }
-//}
+
+@PreviewLightDark
+@Composable
+private fun PriceChangePreview() {
+    ComposeTheme {
+        LoginInputs(
+            loginState = LoginState(),
+            onEmailChange = {},
+            onPasswordChange = {},
+            onSubmit = {},
+            modifier = Modifier
+        )
+    }
+}

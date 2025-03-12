@@ -1,4 +1,4 @@
-package com.example.unihub.uniclub.presentation.authen
+package com.example.unihub.uniclub.presentation.authen.login
 
 import androidx.compose.runtime.Immutable
 

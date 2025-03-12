@@ -1,4 +1,4 @@
-package com.example.unihub.uniclub.presentation.authen
+package com.example.unihub.uniclub.presentation.authen.login
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -50,6 +50,10 @@ class LoginViewModel(
                 passwordErrorResId = null,
             )
         }
+    }
+
+    fun saveToken() {
+
     }
 
     private fun login(email: String, password: String) {

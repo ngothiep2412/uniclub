@@ -1,4 +1,4 @@
-package com.example.unihub.uniclub.presentation.authen
+package com.example.unihub.uniclub.presentation.authen.login
 
 sealed interface LoginAction {
     data class Login(val email: String, val password: String): LoginAction

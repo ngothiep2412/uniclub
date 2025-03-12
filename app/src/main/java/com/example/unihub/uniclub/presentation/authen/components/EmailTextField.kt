@@ -1,6 +1,5 @@
 package com.example.unihub.uniclub.presentation.authen.components
 
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -29,17 +28,17 @@ fun EmailTextField(
         label = {
             Text(text = label)
         },
-//        maxLines = 1,
-//        keyboardOptions = KeyboardOptions(
-//            keyboardType = KeyboardType.Email,
-//            imeAction = imeAction
-//        ),
-//        isError = isError,
-//        supportingText = {
-//            if (isError) {
-//                ErrorTextInputField(text = errorText)
-//            }
-//        }
+        maxLines = 1,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email,
+            imeAction = imeAction
+        ),
+        isError = isError,
+        supportingText = {
+            if (isError) {
+                ErrorTextInputField(text = errorText)
+            }
+        }
     )
 }
 

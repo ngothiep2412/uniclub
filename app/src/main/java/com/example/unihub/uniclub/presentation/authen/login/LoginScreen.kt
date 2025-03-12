@@ -1,4 +1,4 @@
-package com.example.unihub.uniclub.presentation.authen
+package com.example.unihub.uniclub.presentation.authen.login
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
@@ -24,19 +24,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.example.unihub.R
 import com.example.unihub.ui.theme.ComposeTheme
 import com.example.unihub.ui.theme.UniclubTheme
+import com.example.unihub.uniclub.navigation.model.Screen
 import com.example.unihub.uniclub.presentation.authen.components.LoginInputs
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = koinViewModel(),
-    onSuccess: () -> Unit,
+    navController: NavHostController
 ) {
     val context = LocalContext.current
 
@@ -45,6 +47,10 @@ fun LoginScreen(
             when (it) {
                 is LoginEvent.Error -> {
                     Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
+                }
+                is LoginEvent.Success -> {
+                    navController.navigate(Screen.MainNav.route)
+                    viewModel.saveToken()
                 }
             }
         }
@@ -85,7 +91,7 @@ fun LoginScreen(
                         .height(128.dp)
                         .padding(top = UniclubTheme.dimens.paddingSmall),
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(data = R.drawable.jetpack_compose_logo)
+                        .data(data = R.drawable.ic_playstore)
                         .crossfade(enable = true)
                         .scale(Scale.FILL)
                         .build(),
@@ -131,7 +137,8 @@ fun LoginScreen(
 private fun PriceChangePreview() {
     ComposeTheme {
         LoginScreen(
-            onSuccess = {},
+            viewModel = LoginViewModel(),
+            navController = NavHostController(LocalContext.current)
         )
     }
 }

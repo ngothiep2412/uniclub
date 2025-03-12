@@ -1,8 +1,7 @@
 package com.example.unihub.uniclub.navigation
 
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -13,26 +12,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.example.unihub.uniclub.presentation.authen.login.LoginScreen
-import com.example.unihub.uniclub.presentation.authen.login.LoginViewModel
+import com.example.unihub.ui.theme.ComposeTheme
+import com.example.unihub.uniclub.navigation.graph.authNav
+import com.example.unihub.uniclub.navigation.model.Screen
+import com.example.unihub.uniclub.presentation.main.MainScreen
 import kotlinx.coroutines.delay
-import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun RootNavigationGraph(
     navController: NavHostController,
+    onDataLoaded: () -> Unit
 ) {
 
     var fakeLoading by remember { mutableStateOf(true) }
     // TODO: Check session token
-    val session  = "";
+    val session = "";
 
     LaunchedEffect(Unit) {
         delay(1000)
         fakeLoading = false
+        onDataLoaded()
     }
 
     if (!fakeLoading) {
@@ -43,40 +44,84 @@ fun RootNavigationGraph(
                     route = Screen.Root.route,
                     startDestination = Screen.AuthNav.route
                 ) {
+                    authNav(navController = navController)
 
+                    composable(
+                        route = Screen.MainNav.route,
+                        exitTransition = {
+                            slideOutOfContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Left,
+                                tween(500)
+                            )
+                        },
+                        enterTransition = {
+                            slideIntoContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Left,
+                                tween(500)
+                            )
+                        },
+                        popExitTransition = {
+                            slideOutOfContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Right,
+                                tween(500)
+                            )
+                        },
+                        popEnterTransition = {
+                            slideIntoContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Right,
+                                tween(500)
+                            )
+                        }
+                    ) {
+                        MainScreen()
+                    }
                 }
+            }
+        }
+    } else {
+        NavHost(
+            startDestination = Screen.MainNav.route,
+            route = Screen.Root.route,
+            navController = navController
+        ) {
+//            authNav(navController = navController)
+            composable(
+                route = Screen.MainNav.route,
+                exitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        tween(500)
+                    )
+                },
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        tween(500)
+                    )
+                },
+                popExitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        tween(500)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        tween(500)
+                    )
+                }
+            ){
+                MainScreen()
             }
         }
     }
+}
 
-    MaterialTheme {
-        val navController = rememberNavController()
-
-        NavHost(
-            navController = navController,
-            startDestination = Route.NavGraph
-        ) {
-            navigation<Route.NavGraph>(
-                startDestination = Route.LOGIN
-            ) {
-                composable<Route.LOGIN>(
-                    exitTransition = { slideOutHorizontally() },
-                    popEnterTransition = { slideInHorizontally() }
-                ) {
-                    // LoginScreen()
-                    val viewModel = koinViewModel<LoginViewModel>()
-
-                    LoginScreen(
-                        viewModel = viewModel,
-                        onSuccess = {
-                            navController.navigate(Route.HOME) {
-                                popUpTo(Route.LOGIN) { inclusive = true }
-                            }
-                        }
-                    )
-
-                }
-            }
-        }
+@Preview
+@Composable
+private fun RootNavigationGraphPreview() {
+    ComposeTheme {
+        RootNavigationGraph(navController = rememberNavController()) {}
     }
 }

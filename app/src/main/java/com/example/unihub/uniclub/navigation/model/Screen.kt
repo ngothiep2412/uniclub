@@ -3,7 +3,6 @@ package com.example.unihub.uniclub.navigation.model
 sealed class Screen(val route: String) {
 
     // Screen Routes
-    data object Splash : Screen("splash")
 //    data object Welcome : Screen("welcome")
     data object SignUp : Screen("signup")
     data object Login : Screen("login")

@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.jetbrains.compose.navigation)
     implementation(libs.androidx.navigation.common.ktx)
     debugImplementation(libs.bundles.compose.debug)
+    implementation(libs.androidx.core.splashscreen)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 

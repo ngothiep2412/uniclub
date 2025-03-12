@@ -11,7 +11,7 @@ class UniclubApp : Application() {
         super.onCreate()
         startKoin {
             androidLogger()
-            androidContext(this@UniclubApp)
+            androidContext(applicationContext)
             modules(appModule)
         }
     }

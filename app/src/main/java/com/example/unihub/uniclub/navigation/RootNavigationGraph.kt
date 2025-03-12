@@ -38,7 +38,7 @@ fun RootNavigationGraph(
 
     if (!fakeLoading) {
         when {
-            session.isEmpty() -> {
+            !session.isEmpty() -> {
                 NavHost(
                     navController = navController,
                     route = Screen.Root.route,
@@ -77,45 +77,47 @@ fun RootNavigationGraph(
                     }
                 }
             }
-        }
-    } else {
-        NavHost(
-            startDestination = Screen.MainNav.route,
-            route = Screen.Root.route,
-            navController = navController
-        ) {
-//            authNav(navController = navController)
-            composable(
-                route = Screen.MainNav.route,
-                exitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Left,
-                        tween(500)
-                    )
-                },
-                enterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Left,
-                        tween(500)
-                    )
-                },
-                popExitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Right,
-                        tween(500)
-                    )
-                },
-                popEnterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Right,
-                        tween(500)
-                    )
+
+            else ->
+                NavHost(
+                    navController = navController,
+                    route = Screen.Root.route,
+                    startDestination = Screen.MainNav.route
+                ) {
+                    authNav(navController = navController)
+                    composable(
+                        route = Screen.MainNav.route,
+                        exitTransition = {
+                            slideOutOfContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Left,
+                                tween(500)
+                            )
+                        },
+                        enterTransition = {
+                            slideIntoContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Left,
+                                tween(500)
+                            )
+                        },
+                        popExitTransition = {
+                            slideOutOfContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Right,
+                                tween(500)
+                            )
+                        },
+                        popEnterTransition = {
+                            slideIntoContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Right,
+                                tween(500)
+                            )
+                        }
+                    ) {
+                        MainScreen()
+                    }
                 }
-            ){
-                MainScreen()
-            }
         }
     }
+
 }
 
 @Preview

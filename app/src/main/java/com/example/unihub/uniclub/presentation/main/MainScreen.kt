@@ -2,6 +2,7 @@ package com.example.unihub.uniclub.presentation.main
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,28 +22,26 @@ fun MainScreen(
         .value?.destination?.route
 
     Scaffold(
-        content = {
-            innerPadding ->
+        content = { innerPadding ->
             MainNavGraph(
                 navController = navController,
                 paddingValues = innerPadding
             )
         },
-
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         modifier = Modifier.fillMaxSize(),
-
         bottomBar = {
             if (currentDestination !in listOf(
-                Screen.Login.route,
-                Screen.SignUp.route,
-                Screen.Profile.route
-            )) {
+                    Screen.MyCart.route,
+                    Screen.Login.route,
+                    Screen.SignUp.route,
+                )
+            ) {
                 BottomNavigation(
-                    navController = rememberNavController()
+                    navController = navController,
+                    modifier = Modifier.navigationBarsPadding()
                 )
             }
         }
-
     )
 }

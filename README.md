@@ -1,6 +1,6 @@
 <h1>Uniclub Store 👕🩳</h1>
 
-<p>Uniclub Store is a simple Android e-commerce app built using Jetpack Compose and Fake Store API. The app offers a seamless shopping experience with features like product search, checkout system, and more.<br><br>
+<p>Uniclub Store is a simple Android e-commerce app built using Jetpack Compose and using my BE coded by Spring-boot. The app offers a seamless shopping experience with features like product search, checkout system, and more.<br><br>
 API : https://github.com/ngothiep2412/unihub-backend
 </p>
 

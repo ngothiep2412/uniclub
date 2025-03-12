@@ -2,6 +2,7 @@ package com.example.unihub.uniclub.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.unihub.uniclub.presentation.home.components.Product
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -12,7 +13,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class HomeViewModel : ViewModel() {
     private val _state = MutableStateFlow(HomeState(isLoading = true))
@@ -32,6 +32,16 @@ class HomeViewModel : ViewModel() {
     private var cachedProducts = emptyList<String>()
 
     private var cartJob: Job? = null
+
+    fun onAction(action: HomeAction) {
+        when(action) {
+            is HomeAction.AddToCart -> addToCart(action.product)
+        }
+    }
+
+    private fun addToCart(product: Product) {
+       // TODO()
+    }
 
     private fun loadProducts() {
         viewModelScope.launch {

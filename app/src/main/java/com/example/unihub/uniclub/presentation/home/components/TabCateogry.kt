@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.unihub.R
 import com.example.unihub.core.presentation.util.component.AnimatedShimmerProduct
 import com.example.unihub.ui.theme.ComposeTheme
+import com.example.unihub.uniclub.presentation.home.HomeAction
 import com.example.unihub.uniclub.presentation.home.HomeViewModel
 import com.example.vibestore.ui.theme.poppinsFontFamily
 import kotlinx.coroutines.launch
@@ -230,6 +231,8 @@ fun TabCategory(
                                 price = "$${product.price}",
                                 category = product.category,
                                 addToCart = {
+                                    viewModel.onAction(HomeAction.AddToCart(product))
+
                                     coroutineScope.launch {
                                         snackbarHostState.showSnackbar(
                                             message = "Added to cart",

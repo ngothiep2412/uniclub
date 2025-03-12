@@ -59,7 +59,6 @@ fun ComposeTheme(
     ProvideDimens(dimensions = dimensions) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = Typography,
             content = content
         )
     }

@@ -36,6 +36,7 @@ fun MainScreen(
             if (currentDestination !in listOf(
                 Screen.Login.route,
                 Screen.SignUp.route,
+                Screen.Profile.route
             )) {
                 BottomNavigation(
                     navController = rememberNavController()

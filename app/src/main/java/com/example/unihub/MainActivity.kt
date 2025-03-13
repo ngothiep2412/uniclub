@@ -9,6 +9,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.example.unihub.ui.theme.ComposeTheme
 import com.example.unihub.uniclub.navigation.RootNavigationGraph
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,8 +29,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         actionBar?.hide()
         setContent {
-            ComposeTheme(dynamicColor = false){
-                RootNavigationGraph(navController = rememberNavController()) {
+            ComposeTheme(dynamicColor = false) {
+                RootNavigationGraph(
+                    navController = rememberNavController(),
+                    viewModel = koinViewModel(),
+                ) {
                     keepSplashOnScreen = false
                 }
             }

@@ -18,6 +18,10 @@ navigationCommonKtx = "2.8.7"
 navigationCompose = "2.8.0-alpha10"
 coreSplashscreen = "1.0.1"
 compose-plugin = "1.7.0"
+timber = "5.0.1"
+datastoreCoreAndroid = "1.1.3"
+dataStorePreference = "1.0.0"
+runtimeLivedata = "1.7.8"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -54,10 +58,14 @@ androidx-compose-material3-adaptive-navigation = { module = "androidx.compose.ma
 compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "compose-material-icons-extended" }
 
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 
 androidx-navigation-common-ktx = { group = "androidx.navigation", name = "navigation-common-ktx", version.ref = "navigationCommonKtx" }
 jetbrains-compose-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref= "navigationCompose"}
+androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
+androidx-datastore-preferences = {group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStorePreference"}
+androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -80,6 +88,11 @@ compose = [
     "compose-material-icons-extended",
     "coil-compose"
 ]
+datastore = [
+    "androidx-datastore-core-android",
+    "androidx-datastore-preferences"
+]
+
 compose-debug = [
     "androidx-ui-tooling",
     "androidx-ui-test-manifest",

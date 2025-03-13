@@ -4,6 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.unihub.R
+import com.example.unihub.core.domain.util.onError
+import com.example.unihub.core.domain.util.onSuccess
+import com.example.unihub.uniclub.domain.UniclubDataSource
+import com.example.unihub.uniclub.util.AppPreferencesDataSource
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +17,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-
+    private val uniclubDataSource: UniclubDataSource,
+    private val appPreferencesDataSource: AppPreferencesDataSource
 ) : ViewModel() {
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state.asStateFlow()
@@ -52,8 +57,10 @@ class LoginViewModel(
         }
     }
 
-    fun saveToken() {
-
+    private fun saveToken(token: String) {
+        viewModelScope.launch {
+            appPreferencesDataSource.saveAuthToken(token)
+        }
     }
 
     private fun login(email: String, password: String) {
@@ -63,6 +70,16 @@ class LoginViewModel(
 
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
+            uniclubDataSource.login(email, password)
+                .onSuccess { token ->
+                    _state.update { it.copy(isLoading = false) }
+                    saveToken(token);
+                    _event.send(LoginEvent.Success)
+                }
+                .onError { error ->
+                    _state.update { it.copy(isLoading = false) }
+                    _event.send(LoginEvent.Error(error))
+                }
         }
     }
 

@@ -50,7 +50,6 @@ fun LoginScreen(
                 }
                 is LoginEvent.Success -> {
                     navController.navigate(Screen.MainNav.route)
-                    viewModel.saveToken()
                 }
             }
         }
@@ -137,7 +136,7 @@ fun LoginScreen(
 private fun PriceChangePreview() {
     ComposeTheme {
         LoginScreen(
-            viewModel = LoginViewModel(),
+            viewModel = koinViewModel<LoginViewModel>(),
             navController = NavHostController(LocalContext.current)
         )
     }

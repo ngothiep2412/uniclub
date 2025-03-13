@@ -56,7 +56,6 @@ fun HomeScreen(
     navController: NavHostController,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
-//    val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val state by viewModel.state.collectAsStateWithLifecycle()
 

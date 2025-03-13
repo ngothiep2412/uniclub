@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -17,18 +18,22 @@ import com.example.unihub.ui.theme.ComposeTheme
 import com.example.unihub.uniclub.navigation.graph.authNav
 import com.example.unihub.uniclub.navigation.model.Screen
 import com.example.unihub.uniclub.presentation.main.MainScreen
+import com.example.unihub.uniclub.presentation.main.MainViewModel
 import kotlinx.coroutines.delay
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun RootNavigationGraph(
     navController: NavHostController,
-    onDataLoaded: () -> Unit
+    viewModel: MainViewModel,
+    onDataLoaded: () -> Unit,
 ) {
 
     var fakeLoading by remember { mutableStateOf(true) }
     // TODO: Check session token
-    val session = "";
+
+    val session = viewModel.getSession().observeAsState()
 
     LaunchedEffect(Unit) {
         delay(1000)
@@ -38,7 +43,7 @@ fun RootNavigationGraph(
 
     if (!fakeLoading) {
         when {
-            !session.isEmpty() -> {
+            session.value!!.isEmpty() -> {
                 NavHost(
                     navController = navController,
                     route = Screen.Root.route,
@@ -124,6 +129,9 @@ fun RootNavigationGraph(
 @Composable
 private fun RootNavigationGraphPreview() {
     ComposeTheme {
-        RootNavigationGraph(navController = rememberNavController()) {}
+        RootNavigationGraph(
+            navController = rememberNavController(),
+            viewModel = koinViewModel()
+        ) {}
     }
 }

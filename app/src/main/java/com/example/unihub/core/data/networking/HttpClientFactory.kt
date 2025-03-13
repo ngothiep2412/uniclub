@@ -1,0 +1,44 @@
+package com.example.unihub.core.data.networking
+
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.ANDROID
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.observer.ResponseObserver
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
+
+object HttpClientFactory {
+    fun create(engine: HttpClientEngine): HttpClient {
+        return HttpClient(engine) {
+            install(Logging) {
+                level = LogLevel.ALL
+                logger = Logger.ANDROID
+            }
+            install(ContentNegotiation) {
+                json(
+                    json = Json {
+                        ignoreUnknownKeys = true
+                        prettyPrint = true
+                        isLenient = true
+                    }
+                )
+            }
+            install(ResponseObserver) {
+                onResponse { response ->
+                    println("HttpResponse: ${response.status.value}")
+                }
+            }
+
+            defaultRequest{
+                contentType(ContentType.Application.Json)
+            }
+        }
+    }
+}

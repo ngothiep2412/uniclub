@@ -2,6 +2,7 @@ package com.example.unihub.uniclub.presentation.home.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import coil.compose.AsyncImage
 import com.example.unihub.R
+import com.example.unihub.uniclub.domain.CategoryModel
 import com.example.vibestore.ui.theme.poppinsFontFamily
 
 data class Product(
@@ -52,7 +54,7 @@ fun ProductCard(
     title: String,
     rating: String,
     price: String,
-    category: String,
+    categories: List<CategoryModel>,
     addToCart: () -> Unit,
 ) {
     val ratingState by remember { mutableFloatStateOf(rating.toFloat()) }
@@ -80,13 +82,28 @@ fun ProductCard(
                 .clip(RoundedCornerShape(10.dp))
 
         )
+        if (categories.isNotEmpty()) {
+            categories.map {
+                Box(
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = it.name,
+                        fontSize = 12.sp,
+                        fontFamily = poppinsFontFamily,
+                        color = Color.White
+                    )
+                }
+            }
+
+        }
         Column {
-            Text(
-                fontFamily = poppinsFontFamily,
-                fontSize = 14.sp,
-                text = category,
-                color = MaterialTheme.colorScheme.outline
-            )
             Text(
                 text = title,
                 maxLines = 1,
@@ -117,7 +134,7 @@ fun ProductCard(
                     modifier = Modifier
                         .offset(y = (5).dp)
                         .weight(1f),
-                    text = "$$price",
+                    text = price,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 20.sp,
                     fontFamily = poppinsFontFamily,

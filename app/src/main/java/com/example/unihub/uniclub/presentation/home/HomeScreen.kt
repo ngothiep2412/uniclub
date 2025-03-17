@@ -44,7 +44,7 @@ import androidx.navigation.NavHostController
 import com.example.unihub.R
 import com.example.unihub.uniclub.navigation.model.Screen
 import com.example.unihub.uniclub.presentation.home.components.HomeSection
-import com.example.unihub.uniclub.presentation.home.components.TabCategory
+import com.example.unihub.uniclub.presentation.home.components.TabBrand
 import com.example.vibestore.ui.component.ImageSlider
 import com.example.vibestore.ui.theme.poppinsFontFamily
 import org.koin.androidx.compose.koinViewModel
@@ -54,10 +54,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    viewModel: HomeViewModel = koinViewModel(),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val state by viewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
         snackbarHost = {
@@ -93,7 +91,7 @@ fun HomeScreen(
                                 .size(30.dp)
                         )
                         Text(
-                            text = "Vibe",
+                            text = "Uniclub",
                             fontFamily = poppinsFontFamily,
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
@@ -166,9 +164,9 @@ fun HomeScreen(
             )
 
             HomeSection(
-                title = stringResource(R.string.categories),
+                title = stringResource(R.string.brands),
                 content = {
-                    TabCategory(
+                    TabBrand(
                       snackbarHostState = snackbarHostState,
                     )
                 },

@@ -21,6 +21,7 @@ import com.example.unihub.uniclub.presentation.main.MainScreen
 import com.example.unihub.uniclub.presentation.main.MainViewModel
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 
 
 @Composable
@@ -34,6 +35,8 @@ fun RootNavigationGraph(
     // TODO: Check session token
 
     val session = viewModel.getSession().observeAsState()
+    Timber.d("Session: ${session.value}")
+
 
     LaunchedEffect(Unit) {
         delay(1000)
@@ -43,7 +46,7 @@ fun RootNavigationGraph(
 
     if (!fakeLoading) {
         when {
-            session.value!!.isEmpty() -> {
+            session.value == null || session.value!!.isEmpty() -> {
                 NavHost(
                     navController = navController,
                     route = Screen.Root.route,

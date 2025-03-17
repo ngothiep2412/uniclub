@@ -2,7 +2,9 @@ package com.example.unihub.di
 
 import com.example.unihub.core.data.networking.HttpClientFactory
 import com.example.unihub.uniclub.data.network.RemoteUniclubDataSource
+import com.example.unihub.uniclub.data.repository.DefaultUniclubRepository
 import com.example.unihub.uniclub.domain.UniclubDataSource
+import com.example.unihub.uniclub.domain.UniclubRepository
 import com.example.unihub.uniclub.presentation.authen.login.LoginViewModel
 import com.example.unihub.uniclub.presentation.home.HomeViewModel
 import com.example.unihub.uniclub.presentation.main.MainViewModel
@@ -21,6 +23,8 @@ val appModule = module {
     single { AppPreferencesDataSource(androidContext()) }
 
     singleOf(::RemoteUniclubDataSource).bind<UniclubDataSource>()
+
+    singleOf(::DefaultUniclubRepository).bind<UniclubRepository>()
 
     single<UniclubDataSource> { RemoteUniclubDataSource(get()) }
 

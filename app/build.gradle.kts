@@ -68,12 +68,14 @@ dependencies {
     implementation(libs.androidx.navigation.common.ktx)
     implementation(libs.bundles.datastore)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.firebase.components)
     debugImplementation(libs.bundles.compose.debug)
     implementation(libs.androidx.core.splashscreen)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(libs.bundles.koin)
+    implementation(libs.bundles.auth)
 
     implementation(libs.bundles.ktor)
 

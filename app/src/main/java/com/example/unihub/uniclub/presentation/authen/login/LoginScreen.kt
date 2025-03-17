@@ -1,6 +1,10 @@
 package com.example.unihub.uniclub.presentation.authen.login
 
+import android.app.Activity
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -33,14 +38,21 @@ import com.example.unihub.ui.theme.ComposeTheme
 import com.example.unihub.ui.theme.UniclubTheme
 import com.example.unihub.uniclub.navigation.model.Screen
 import com.example.unihub.uniclub.presentation.authen.components.LoginInputs
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun LoginScreen(
-    viewModel: LoginViewModel = koinViewModel(),
-    navController: NavHostController
-) {
+fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), navController: NavHostController) {
     val context = LocalContext.current
+
+    val googleSignInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) {result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            viewModel.onAction(LoginAction.ProcessGoogleSignInTask(task))
+        }
+    }
 
     LaunchedEffect(true) {
         viewModel.event.collect {
@@ -48,34 +60,39 @@ fun LoginScreen(
                 is LoginEvent.Error -> {
                     Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
                 }
+
                 is LoginEvent.Success -> {
                     navController.navigate(Screen.MainNav.route)
                 }
+
+                is LoginEvent.ErrorGoogle -> TODO()
             }
         }
     }
+
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     Column(
         Modifier
             .fillMaxSize()
+            .background(Color.White)
             .navigationBarsPadding()
             .imePadding()
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ElevatedCard(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(UniclubTheme.dimens.paddingLarge)
-        ) {
+        ElevatedCard(modifier = Modifier
+            .fillMaxWidth()
+            .padding(UniclubTheme.dimens.paddingLarge)) {
             Column(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .padding(horizontal = UniclubTheme.dimens.paddingLarge)
                     .padding(bottom = UniclubTheme.dimens.paddingExtraLarge)
             ) {
                 Text(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .padding(top = UniclubTheme.dimens.paddingLarge)
                         .fillMaxWidth(),
                     text = "Login",
@@ -85,11 +102,13 @@ fun LoginScreen(
                 )
 
                 AsyncImage(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .height(128.dp)
                         .padding(top = UniclubTheme.dimens.paddingSmall),
-                    model = ImageRequest.Builder(LocalContext.current)
+                    model =
+                    ImageRequest.Builder(LocalContext.current)
                         .data(data = R.drawable.ic_playstore)
                         .crossfade(enable = true)
                         .scale(Scale.FILL)
@@ -103,33 +122,19 @@ fun LoginScreen(
                     text = stringResource(id = R.string.login_heading_text)
                 )
 
-
                 LoginInputs(
                     loginState = state,
-                    onEmailChange = {
-                        viewModel.onAction(LoginAction.EmailChanged(it))
+                    onEmailChange = { viewModel.onAction(LoginAction.EmailChanged(it)) },
+                    onPasswordChange = { viewModel.onAction(LoginAction.PasswordChanged(it)) },
+                    onSubmit = {
+                        viewModel.onAction(LoginAction.Login(state.email, state.password))
                     },
-                    onPasswordChange = {
-                        viewModel.onAction(LoginAction.PasswordChanged(it))
-                    },
-                    onSubmit =
-                    {
-                        viewModel.onAction(
-                            LoginAction.Login(
-                                state.email,
-                                state.password
-                            )
-                        )
-                    },
-
                     modifier = Modifier.fillMaxSize()
                 )
             }
         }
-
     }
 }
-
 
 @PreviewLightDark
 @Composable

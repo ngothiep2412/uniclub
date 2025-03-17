@@ -1,7 +1,7 @@
 package com.example.unihub.uniclub.presentation.home
 
-import com.example.unihub.uniclub.presentation.home.components.Product
+import ProductModel
 
 sealed interface HomeAction {
-    data class AddToCart(val product: Product) : HomeAction
+    data class AddToCart(val product: ProductModel) : HomeAction
 }

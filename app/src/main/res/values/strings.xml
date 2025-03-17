@@ -18,6 +18,7 @@
     <string name="password_short">Password must be at least 6 characters</string>
     <string name="login_heading_text">Login</string>
 
-    <string name="categories">Categories</string>
+    <string name="brands">Brands</string>
     <string name="no_product">No products available in this category</string>
+    <string name="no_brand">No brand available</string>"
 </resources>

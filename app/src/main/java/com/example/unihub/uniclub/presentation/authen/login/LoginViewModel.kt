@@ -7,7 +7,11 @@ import com.example.unihub.R
 import com.example.unihub.core.domain.util.onError
 import com.example.unihub.core.domain.util.onSuccess
 import com.example.unihub.uniclub.domain.UniclubDataSource
+import com.example.unihub.uniclub.domain.UniclubRepository
 import com.example.unihub.uniclub.util.AppPreferencesDataSource
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +21,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val uniclubDataSource: UniclubDataSource,
+    private val uniclubRepository: UniclubRepository,
     private val appPreferencesDataSource: AppPreferencesDataSource
 ) : ViewModel() {
     private val _state = MutableStateFlow(LoginState())
@@ -34,8 +38,10 @@ class LoginViewModel(
             is LoginAction.Login -> login(action.email, action.password);
             is LoginAction.EmailChanged -> updatedEmail(action.email)
             is LoginAction.PasswordChanged -> updatedPassword(action.password)
+            is LoginAction.ProcessGoogleSignInTask -> processGoogleSignInTask(action.task)
         }
     }
+
 
     private fun updatedEmail(email: String) {
         Log.d("LoginViewModel", "updatedEmail: $email")
@@ -70,7 +76,7 @@ class LoginViewModel(
 
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            uniclubDataSource.login(email, password)
+            uniclubRepository.login(email, password)
                 .onSuccess { token ->
                     _state.update { it.copy(isLoading = false) }
                     saveToken(token);
@@ -80,6 +86,27 @@ class LoginViewModel(
                     _state.update { it.copy(isLoading = false) }
                     _event.send(LoginEvent.Error(error))
                 }
+        }
+    }
+
+    private fun processGoogleSignInTask(task: Task<GoogleSignInAccount>) {
+        viewModelScope.launch {
+
+            _state.update { it.copy(isLoading = true) }
+            val account = try {
+                task.getResult(ApiException::class.java)
+            }  catch (e: ApiException) {
+                _event.send(LoginEvent.ErrorGoogle("Google sign-in failed: ${e.statusCode}"))
+                null
+            }
+
+            if (account == null) {
+                _state.value = state.value.copy(isLoading = false)
+                return@launch
+            }
+
+            val idToken = account.idToken
+
         }
     }
 
